@@ -7,18 +7,19 @@ import {
   Menu,
   X,
   User,
-  ShoppingBag,
+  Wallet,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 
 interface NavbarProps {
   onHelpOpen: () => void
+  onPaymentOpen: () => void
   searchQuery: string
   onSearchChange: (query: string) => void
 }
 
-export function Navbar({ onHelpOpen, searchQuery, onSearchChange }: NavbarProps) {
+export function Navbar({ onHelpOpen, onPaymentOpen, searchQuery, onSearchChange }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
@@ -26,9 +27,11 @@ export function Navbar({ onHelpOpen, searchQuery, onSearchChange }: NavbarProps)
       <nav className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 lg:px-8">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2 shrink-0">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-            <ShoppingBag className="h-4 w-4 text-primary-foreground" />
-          </div>
+          <img
+            src="/images/fluxera-logo.jpg"
+            alt="Fluxera logo"
+            className="h-8 w-8 rounded-lg object-cover"
+          />
           <span className="text-lg font-bold tracking-tight text-foreground">
             Fluxera
           </span>
@@ -50,6 +53,10 @@ export function Navbar({ onHelpOpen, searchQuery, onSearchChange }: NavbarProps)
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-1 md:flex">
+          <Button variant="ghost" size="sm" onClick={onPaymentOpen} className="text-muted-foreground hover:text-foreground">
+            <Wallet className="mr-1.5 h-4 w-4" />
+            Wallet
+          </Button>
           <Button variant="ghost" size="sm" onClick={onHelpOpen} className="text-muted-foreground hover:text-foreground">
             <HelpCircle className="mr-1.5 h-4 w-4" />
             Help
@@ -89,6 +96,10 @@ export function Navbar({ onHelpOpen, searchQuery, onSearchChange }: NavbarProps)
             />
           </div>
           <div className="mt-3 flex flex-col gap-1">
+            <Button variant="ghost" size="sm" className="justify-start text-muted-foreground" onClick={onPaymentOpen}>
+              <Wallet className="mr-2 h-4 w-4" />
+              Wallet & Payments
+            </Button>
             <Button variant="ghost" size="sm" className="justify-start text-muted-foreground" onClick={onHelpOpen}>
               <HelpCircle className="mr-2 h-4 w-4" />
               Help & Support

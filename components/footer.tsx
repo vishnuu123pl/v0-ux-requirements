@@ -1,7 +1,5 @@
 "use client"
 
-import { ShoppingBag } from "lucide-react"
-
 interface FooterProps {
   onHelpOpen: () => void
 }
@@ -14,9 +12,11 @@ export function Footer({ onHelpOpen }: FooterProps) {
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary">
-                <ShoppingBag className="h-4 w-4 text-primary-foreground" />
-              </div>
+              <img
+                src="/images/fluxera-logo.jpg"
+                alt="Fluxera logo"
+                className="h-8 w-8 rounded-lg object-cover"
+              />
               <span className="text-lg font-bold text-foreground">Fluxera</span>
             </div>
             <p className="mt-3 text-sm leading-relaxed text-muted-foreground">

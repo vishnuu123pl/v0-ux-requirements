@@ -10,6 +10,7 @@ import {
   Bookmark,
   ChevronLeft,
   ChevronRight,
+  Share2,
 } from "lucide-react"
 import {
   Sheet,
@@ -22,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Separator } from "@/components/ui/separator"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { OwnerChat } from "@/components/owner-chat"
 import type { RentalItem } from "@/lib/data"
 
 interface ItemQuickViewProps {
@@ -86,6 +88,7 @@ function ImageCarousel({ images, name }: { images: string[]; name: string }) {
 
 export function ItemQuickView({ item, open, onClose }: ItemQuickViewProps) {
   const [saved, setSaved] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
 
   if (!item) return null
 
@@ -120,22 +123,9 @@ export function ItemQuickView({ item, open, onClose }: ItemQuickViewProps) {
 
             {/* Title & Price */}
             <div className="flex flex-col gap-2">
-              <div className="flex items-start justify-between gap-3">
-                <h2 className="text-xl font-bold leading-tight text-foreground text-balance">
-                  {item.name}
-                </h2>
-                <button
-                  onClick={() => setSaved(!saved)}
-                  className={`shrink-0 rounded-lg p-2 transition-colors ${
-                    saved
-                      ? "bg-primary/10 text-primary"
-                      : "bg-muted text-muted-foreground hover:text-foreground"
-                  }`}
-                  aria-label={saved ? "Unsave item" : "Save item"}
-                >
-                  <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
-                </button>
-              </div>
+              <h2 className="text-xl font-bold leading-tight text-foreground text-balance">
+                {item.name}
+              </h2>
 
               <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-bold text-primary">
@@ -212,24 +202,70 @@ export function ItemQuickView({ item, open, onClose }: ItemQuickViewProps) {
                 </div>
               </div>
             )}
+
+            {/* Chat with Owner CTA */}
+            <button
+              onClick={() => setChatOpen(true)}
+              className="group flex items-center gap-3 rounded-xl border-2 border-primary/20 bg-primary/5 p-4 text-left transition-all hover:border-primary/40 hover:bg-primary/10"
+            >
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-105">
+                <MessageCircle className="h-5 w-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="text-sm font-semibold text-foreground">
+                  Chat with {item.seller.name.split(" ")[0]}
+                </span>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Ask about availability, condition, pickup &amp; more
+                </p>
+              </div>
+              <ChevronRight className="h-4 w-4 shrink-0 text-primary/60 transition-transform group-hover:translate-x-0.5" />
+            </button>
           </div>
         </ScrollArea>
 
         {/* Fixed Action Buttons */}
-        <div className="absolute bottom-0 left-0 right-0 flex gap-2 border-t border-border bg-card p-4">
-          <Button
-            variant="outline"
-            className="flex-1 border-border text-foreground hover:bg-muted"
-          >
-            <MessageCircle className="mr-2 h-4 w-4" />
-            Chat with Owner
-          </Button>
-          <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90">
-            <Send className="mr-2 h-4 w-4" />
-            Request Item
-          </Button>
+        <div className="absolute bottom-0 left-0 right-0 border-t border-border bg-card p-4">
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setSaved(!saved)}
+              className={`shrink-0 border-border ${
+                saved
+                  ? "bg-primary/10 text-primary border-primary/30"
+                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
+              }`}
+              aria-label={saved ? "Unsave item" : "Save item"}
+            >
+              <Bookmark className={`h-4 w-4 ${saved ? "fill-current" : ""}`} />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="shrink-0 border-border text-muted-foreground hover:text-foreground hover:bg-muted"
+              aria-label="Share item"
+            >
+              <Share2 className="h-4 w-4" />
+            </Button>
+            <Button
+              onClick={() => setChatOpen(true)}
+              variant="outline"
+              className="flex-1 border-primary/30 text-primary hover:bg-primary/5 hover:text-primary font-semibold"
+            >
+              <MessageCircle className="mr-2 h-4 w-4" />
+              Chat
+            </Button>
+            <Button className="flex-1 bg-primary text-primary-foreground hover:bg-primary/90 font-semibold">
+              <Send className="mr-2 h-4 w-4" />
+              Request Item
+            </Button>
+          </div>
         </div>
       </SheetContent>
+
+      {/* Owner Chat Drawer */}
+      <OwnerChat item={item} open={chatOpen} onClose={() => setChatOpen(false)} />
     </Sheet>
   )
 }

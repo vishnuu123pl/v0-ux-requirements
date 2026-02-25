@@ -9,6 +9,7 @@ import { CategoryFilter } from "@/components/category-filter"
 import { ItemQuickView } from "@/components/item-quick-view"
 import { HelpPanel } from "@/components/help-panel"
 import { SupportChat } from "@/components/support-chat"
+import { PaymentSetup } from "@/components/payment-setup"
 import { TrendingUp, Users, Shield } from "lucide-react"
 
 export default function HomePage() {
@@ -18,6 +19,7 @@ export default function HomePage() {
   const [quickViewOpen, setQuickViewOpen] = useState(false)
   const [helpOpen, setHelpOpen] = useState(false)
   const [chatOpen, setChatOpen] = useState(false)
+  const [paymentOpen, setPaymentOpen] = useState(false)
 
   const filteredItems = useMemo(() => {
     return rentalItems.filter((item) => {
@@ -41,6 +43,7 @@ export default function HomePage() {
     <div className="flex min-h-screen flex-col bg-background">
       <Navbar
         onHelpOpen={() => setHelpOpen(true)}
+        onPaymentOpen={() => setPaymentOpen(true)}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
       />
@@ -143,6 +146,9 @@ export default function HomePage() {
 
       {/* Support Chat Bot */}
       <SupportChat open={chatOpen} onClose={() => setChatOpen(false)} />
+
+      {/* Payment Setup Panel */}
+      <PaymentSetup open={paymentOpen} onClose={() => setPaymentOpen(false)} />
     </div>
   )
 }
