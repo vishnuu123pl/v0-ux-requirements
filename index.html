@@ -1,115 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluxera | Campus Rental Marketplace</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        .modal-overlay {
-            transition: opacity 0.3s ease;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fluxera | Campus Rental Marketplace</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    .modal-overlay {
+      transition: opacity 0.3s ease;
+    }
+  </style>
 </head>
+
 <body class="bg-gray-50">
 
-    <nav class="bg-white shadow-sm p-4 flex justify-between items-center px-8">
-        <div class="text-2xl font-bold text-blue-600">Fluxera</div>
-        <div>
-            <button id="openLogin" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
-                Sign In
-            </button>
-        </div>
-    </nav>
-
-    <main class="flex flex-col items-center justify-center py-20">
-        <h1 class="text-4xl font-extrabold text-gray-900 mb-4">Rent Anything on Campus</h1>
-        <p class="text-gray-600 text-lg">The trusted marketplace for students at your college.</p>
-    </main>
-
-
-    <div id="authModal" class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl relative overflow-hidden">
-            
-            <button id="closeModal" class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl font-bold">&times;</button>
-            
-            <div class="p-8">
-                <h2 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-2">Sign In to Fluxera</h2>
-                <p id="modalSub" class="text-gray-500 mb-6 text-sm">Welcome back! Please enter your details.</p>
-
-                <form id="authForm" class="space-y-4">
-                    <div id="nameField" class="hidden">
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Full Name</label>
-                        <input type="text" placeholder="Your Name" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">College Email</label>
-                        <input type="email" required placeholder="name@college.edu" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-semibold text-gray-700 mb-1">Password</label>
-                        <input type="password" required placeholder="••••••••" class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none">
-                    </div>
-
-                    <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition">
-                        Continue
-                    </button>
-                </form>
-
-                <div class="mt-6 text-center text-sm text-gray-600">
-                    <span id="toggleText">Don't have an account?</span>
-                    <button id="toggleAuth" class="text-blue-600 font-bold hover:underline ml-1">Sign Up</button>
-                </div>
-            </div>
-        </div>
+  <!-- NAVBAR -->
+  <nav class="bg-white shadow-sm p-4 flex justify-between items-center px-8">
+    <div class="text-2xl font-bold text-blue-600">Fluxera</div>
+    <div>
+      <button
+        id="openLogin"
+        class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
+      >
+        Sign In
+      </button>
     </div>
+  </nav>
 
-    <script>
-        const openBtn = document.getElementById('openLogin');
-        const closeBtn = document.getElementById('closeModal');
-        const modal = document.getElementById('authModal');
-        const toggleBtn = document.getElementById('toggleAuth');
-        
-        const modalTitle = document.getElementById('modalTitle');
-        const modalSub = document.getElementById('modalSub');
-        const toggleText = document.getElementById('toggleText');
-        const nameField = document.getElementById('nameField');
+  <!-- HERO -->
+  <main class="flex flex-col items-center justify-center py-20">
+    <h1 class="text-4xl font-extrabold text-gray-900 mb-4">
+      Rent Anything on Campus
+    </h1>
+    <p class="text-gray-600 text-lg">
+      The trusted marketplace for students at your college.
+    </p>
+  </main>
 
-        let isLoginMode = true;
+  <!-- AUTH MODAL -->
+  <div
+    id="authModal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+  >
+    <div class="bg-white rounded-2xl w-full max-w-md shadow-2xl relative">
 
-        // Open Modal
-        openBtn.onclick = () => modal.classList.remove('hidden');
+      <!-- CLOSE BUTTON -->
+      <button
+        id="closeModal"
+        class="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl font-bold"
+      >
+        &times;
+      </button>
 
-        // Close Modal
-        closeBtn.onclick = () => modal.classList.add('hidden');
+      <div class="p-8">
+        <h2 id="modalTitle" class="text-2xl font-bold text-gray-900 mb-2">
+          Sign In to Fluxera
+        </h2>
+        <p id="modalSub" class="text-gray-500 mb-6 text-sm">
+          Welcome back! Please enter your details.
+        </p>
 
-        // Close Modal if clicking outside the white box
-        window.onclick = (event) => {
-            if (event.target == modal) modal.classList.add('hidden');
+        <form id="authForm" class="space-y-4">
+
+          <!-- NAME (SIGNUP ONLY) -->
+          <div id="nameField" class="hidden">
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              Full Name
+            </label>
+            <input
+              type="text"
+              placeholder="Your Name"
+              class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          <!-- EMAIL -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              College Email
+            </label>
+            <input
+              type="email"
+              required
+              placeholder="name@college.edu"
+              class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          <!-- PASSWORD -->
+          <div>
+            <label class="block text-sm font-semibold text-gray-700 mb-1">
+              Password
+            </label>
+            <input
+              type="password"
+              required
+              placeholder="••••••••"
+              class="w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition"
+          >
+            Continue
+          </button>
+        </form>
+
+        <div class="mt-6 text-center text-sm text-gray-600">
+          <span id="toggleText">Don't have an account?</span>
+          <button
+            id="toggleAuth"
+            class="text-blue-600 font-bold hover:underline ml-1"
+          >
+            Sign Up
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ✅ FIXED SCRIPT -->
+  <script>
+    // 🔴 IMPORTANT FIX: Wait until DOM is fully loaded
+    document.addEventListener("DOMContentLoaded", () => {
+
+      const openBtn = document.getElementById("openLogin");
+      const closeBtn = document.getElementById("closeModal");
+      const modal = document.getElementById("authModal");
+      const toggleBtn = document.getElementById("toggleAuth");
+
+      const modalTitle = document.getElementById("modalTitle");
+      const modalSub = document.getElementById("modalSub");
+      const toggleText = document.getElementById("toggleText");
+      const nameField = document.getElementById("nameField");
+
+      let isLoginMode = true;
+
+      // OPEN MODAL
+      openBtn.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+      });
+
+      // CLOSE MODAL
+      closeBtn.addEventListener("click", () => {
+        modal.classList.add("hidden");
+      });
+
+      // CLOSE ON BACKDROP CLICK
+      modal.addEventListener("click", (e) => {
+        if (e.target === modal) {
+          modal.classList.add("hidden");
         }
+      });
 
-        // Toggle Logic (Login vs Signup)
-        toggleBtn.onclick = () => {
-            isLoginMode = !isLoginMode;
-            
-            if (isLoginMode) {
-                modalTitle.innerText = "Sign In to Fluxera";
-                modalSub.innerText = "Welcome back! Please enter your details.";
-                toggleText.innerText = "Don't have an account?";
-                toggleBtn.innerText = "Sign Up";
-                nameField.classList.add('hidden');
-            } else {
-                modalTitle.innerText = "Create Account";
-                modalSub.innerText = "Join the campus marketplace community.";
-                toggleText.innerText = "Already have an account?";
-                toggleBtn.innerText = "Log In";
-                nameField.classList.remove('hidden');
-            }
-        };
+      // TOGGLE LOGIN / SIGNUP
+      toggleBtn.addEventListener("click", () => {
+        isLoginMode = !isLoginMode;
 
-        // Prevent form from refreshing page (for demo purposes)
+        if (isLoginMode) {
+          modalTitle.innerText = "Sign In to Fluxera";
+          modalSub.innerText = "Welcome back! Please enter your details.";
+          toggleText.innerText = "Don't have an account?";
+          toggleBtn.innerText = "Sign Up";
+          nameField.classList.add("hidden");
+        } else {
+          modalTitle.innerText = "Create Account";
+          modalSub.innerText = "Join the campus marketplace community.";
+          toggleText.innerText = "Already have an account?";
+          toggleBtn.innerText = "Log In";
+          nameField.classList.remove("hidden");
+        }
+      });
+
+      // FORM SUBMIT (DEMO)
+      document.getElementById("authForm").addEventListener("submit", (e) => {
+        e.preventDefault();
+        alert("This is a demo. Backend not connected.");
+        modal.classList.add("hidden");
+      });
+
+    });
+  </script>
+
+</body>
+</html>        // Prevent form from refreshing page (for demo purposes)
         document.getElementById('authForm').onsubmit = (e) => {
             e.preventDefault();
             alert("This is a demo. Backend connection is not active.");
