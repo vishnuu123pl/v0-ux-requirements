@@ -1,118 +1,148 @@
-"use client"; // ⭐ REQUIRED FOR BUTTON CLICK TO WORK
+"use client"
 
-import { useState } from "react";
+import { useState, useMemo } from "react"
+import { rentalItems, type RentalItem } from "@/lib/data"
+import { Navbar } from "@/components/navbar"
+import { Footer } from "@/components/footer"
+import { ItemCard } from "@/components/item-card"
+import { CategoryFilter } from "@/components/category-filter"
+import { ItemQuickView } from "@/components/item-quick-view"
+import { HelpPanel } from "@/components/help-panel"
+import { SupportChat } from "@/components/support-chat"
+import { TrendingUp, Users, Shield } from "lucide-react"
 
-export default function Page() {
-  // ⭐ STATE TO CONTROL MODAL
-  const [open, setOpen] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+export default function HomePage() {
+  const [selectedCategory, setSelectedCategory] = useState("All")
+  const [searchQuery, setSearchQuery] = useState("")
+  const [selectedItem, setSelectedItem] = useState<RentalItem | null>(null)
+  const [quickViewOpen, setQuickViewOpen] = useState(false)
+  const [helpOpen, setHelpOpen] = useState(false)
+  const [chatOpen, setChatOpen] = useState(false)
+
+  const filteredItems = useMemo(() => {
+    return rentalItems.filter((item) => {
+      const matchesCategory =
+        selectedCategory === "All" || item.category === selectedCategory
+      const matchesSearch =
+        !searchQuery ||
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.description.toLowerCase().includes(searchQuery.toLowerCase())
+      return matchesCategory && matchesSearch
+    })
+  }, [selectedCategory, searchQuery])
+
+  const handleItemClick = (item: RentalItem) => {
+    setSelectedItem(item)
+    setQuickViewOpen(true)
+  }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-background">
+      <Navbar
+        onHelpOpen={() => setHelpOpen(true)}
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+      />
 
-      {/* ================= NAVBAR ================= */}
-      <nav className="bg-white shadow-sm p-4 flex justify-between items-center px-8">
-        <div className="text-2xl font-bold text-blue-600">Fluxera</div>
-
-        {/* ⭐ SIGN IN BUTTON — THIS MAKES IT RESPOND */}
-        <button
-          onClick={() => setOpen(true)}
-          className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition"
-        >
-          Sign In
-        </button>
-      </nav>
-
-      {/* ================= HERO ================= */}
-      <main className="flex flex-col items-center justify-center py-20">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-4">
-          Rent Anything on Campus
-        </h1>
-        <p className="text-gray-600 text-lg">
-          The trusted marketplace for students at your college.
-        </p>
-      </main>
-
-      {/* ================= AUTH MODAL ================= */}
-      {open && (
-        <div
-          onClick={() => setOpen(false)}
-          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="bg-white rounded-2xl w-full max-w-md shadow-2xl relative"
-          >
-            {/* CLOSE BUTTON */}
-            <button
-              onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-black text-2xl font-bold"
-            >
-              ×
-            </button>
-
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                {isLogin ? "Sign In to Fluxera" : "Create Account"}
-              </h2>
-
-              <p className="text-gray-500 mb-6 text-sm">
-                {isLogin
-                  ? "Welcome back! Please enter your details."
-                  : "Join the campus marketplace community."}
+      <main className="flex-1">
+        {/* Hero Section */}
+        <section className="relative overflow-hidden border-b border-border bg-card">
+          <div className="mx-auto max-w-7xl px-4 py-16 lg:px-8 lg:py-20">
+            <div className="mx-auto max-w-2xl text-center">
+              <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl text-balance">
+                Rent Anything on Campus
+              </h1>
+              <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg text-pretty">
+                The trusted marketplace for college students to rent and share electronics, books, equipment, and more. Save money, reduce waste.
               </p>
+            </div>
 
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  alert("Demo only. Backend not connected.");
-                  setOpen(false);
-                }}
-                className="space-y-4"
-              >
-                {!isLogin && (
-                  <input
-                    type="text"
-                    placeholder="Full Name"
-                    className="w-full border border-gray-300 p-3 rounded-lg"
-                  />
-                )}
-
-                <input
-                  type="email"
-                  required
-                  placeholder="College Email"
-                  className="w-full border border-gray-300 p-3 rounded-lg"
-                />
-
-                <input
-                  type="password"
-                  required
-                  placeholder="Password"
-                  className="w-full border border-gray-300 p-3 rounded-lg"
-                />
-
-                <button
-                  type="submit"
-                  className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition"
-                >
-                  Continue
-                </button>
-              </form>
-
-              <div className="mt-6 text-center text-sm text-gray-600">
-                {isLogin ? "Don't have an account?" : "Already have an account?"}
-                <button
-                  onClick={() => setIsLogin(!isLogin)}
-                  className="text-blue-600 font-bold hover:underline ml-1"
-                >
-                  {isLogin ? "Sign Up" : "Log In"}
-                </button>
+            {/* Stats */}
+            <div className="mx-auto mt-10 grid max-w-lg grid-cols-3 gap-6">
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                </div>
+                <span className="text-lg font-bold text-foreground">2,400+</span>
+                <span className="text-xs text-muted-foreground">Items Listed</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                  <Users className="h-5 w-5 text-primary" />
+                </div>
+                <span className="text-lg font-bold text-foreground">8,500+</span>
+                <span className="text-xs text-muted-foreground">Students</span>
+              </div>
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                  <Shield className="h-5 w-5 text-primary" />
+                </div>
+                <span className="text-lg font-bold text-foreground">50+</span>
+                <span className="text-xs text-muted-foreground">Colleges</span>
               </div>
             </div>
           </div>
-        </div>
-      )}
+        </section>
+
+        {/* Browse Section */}
+        <section className="mx-auto max-w-7xl px-4 py-8 lg:px-8">
+          <div className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <h2 className="text-xl font-bold text-foreground sm:text-2xl">
+                Browse Items
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                {filteredItems.length} item{filteredItems.length !== 1 ? "s" : ""} available
+              </p>
+            </div>
+
+            <CategoryFilter
+              selected={selectedCategory}
+              onChange={setSelectedCategory}
+            />
+
+            {filteredItems.length > 0 ? (
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredItems.map((item) => (
+                  <ItemCard key={item.id} item={item} onClick={handleItemClick} />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 text-center">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-muted">
+                  <TrendingUp className="h-6 w-6 text-muted-foreground" />
+                </div>
+                <h3 className="mt-4 text-base font-semibold text-foreground">
+                  No items found
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Try a different category or search term.
+                </p>
+              </div>
+            )}
+          </div>
+        </section>
+      </main>
+
+      <Footer onHelpOpen={() => setHelpOpen(true)} />
+
+      {/* Item Quick View Side Panel */}
+      <ItemQuickView
+        item={selectedItem}
+        open={quickViewOpen}
+        onClose={() => setQuickViewOpen(false)}
+      />
+
+      {/* Help & Support Panel */}
+      <HelpPanel
+        open={helpOpen}
+        onClose={() => setHelpOpen(false)}
+        onChatOpen={() => setChatOpen(true)}
+      />
+
+      {/* Support Chat Bot */}
+      <SupportChat open={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
-  );
+  )
 }
