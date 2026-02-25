@@ -125,68 +125,55 @@
   </div>
 
   <!-- ✅ FIXED SCRIPT -->
-  <script>
-    // 🔴 IMPORTANT FIX: Wait until DOM is fully loaded
-    document.addEventListener("DOMContentLoaded", () => {
+  <script defer>
+  const openBtn = document.getElementById("openLogin");
+  const closeBtn = document.getElementById("closeModal");
+  const modal = document.getElementById("authModal");
+  const toggleBtn = document.getElementById("toggleAuth");
 
-      const openBtn = document.getElementById("openLogin");
-      const closeBtn = document.getElementById("closeModal");
-      const modal = document.getElementById("authModal");
-      const toggleBtn = document.getElementById("toggleAuth");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalSub = document.getElementById("modalSub");
+  const toggleText = document.getElementById("toggleText");
+  const nameField = document.getElementById("nameField");
 
-      const modalTitle = document.getElementById("modalTitle");
-      const modalSub = document.getElementById("modalSub");
-      const toggleText = document.getElementById("toggleText");
-      const nameField = document.getElementById("nameField");
+  let isLoginMode = true;
 
-      let isLoginMode = true;
+  openBtn.addEventListener("click", () => {
+    modal.classList.remove("hidden");
+  });
 
-      // OPEN MODAL
-      openBtn.addEventListener("click", () => {
-        modal.classList.remove("hidden");
-      });
+  closeBtn.addEventListener("click", () => {
+    modal.classList.add("hidden");
+  });
 
-      // CLOSE MODAL
-      closeBtn.addEventListener("click", () => {
-        modal.classList.add("hidden");
-      });
+  modal.addEventListener("click", (e) => {
+    if (e.target === modal) modal.classList.add("hidden");
+  });
 
-      // CLOSE ON BACKDROP CLICK
-      modal.addEventListener("click", (e) => {
-        if (e.target === modal) {
-          modal.classList.add("hidden");
-        }
-      });
+  toggleBtn.addEventListener("click", () => {
+    isLoginMode = !isLoginMode;
 
-      // TOGGLE LOGIN / SIGNUP
-      toggleBtn.addEventListener("click", () => {
-        isLoginMode = !isLoginMode;
+    if (isLoginMode) {
+      modalTitle.innerText = "Sign In to Fluxera";
+      modalSub.innerText = "Welcome back! Please enter your details.";
+      toggleText.innerText = "Don't have an account?";
+      toggleBtn.innerText = "Sign Up";
+      nameField.classList.add("hidden");
+    } else {
+      modalTitle.innerText = "Create Account";
+      modalSub.innerText = "Join the campus marketplace community.";
+      toggleText.innerText = "Already have an account?";
+      toggleBtn.innerText = "Log In";
+      nameField.classList.remove("hidden");
+    }
+  });
 
-        if (isLoginMode) {
-          modalTitle.innerText = "Sign In to Fluxera";
-          modalSub.innerText = "Welcome back! Please enter your details.";
-          toggleText.innerText = "Don't have an account?";
-          toggleBtn.innerText = "Sign Up";
-          nameField.classList.add("hidden");
-        } else {
-          modalTitle.innerText = "Create Account";
-          modalSub.innerText = "Join the campus marketplace community.";
-          toggleText.innerText = "Already have an account?";
-          toggleBtn.innerText = "Log In";
-          nameField.classList.remove("hidden");
-        }
-      });
-
-      // FORM SUBMIT (DEMO)
-      document.getElementById("authForm").addEventListener("submit", (e) => {
-        e.preventDefault();
-        alert("This is a demo. Backend not connected.");
-        modal.classList.add("hidden");
-      });
-
-    });
+  document.getElementById("authForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    alert("Demo only");
+    modal.classList.add("hidden");
+  });
   </script>
-
 </body>
 </html>        // Prevent form from refreshing page (for demo purposes)
         document.getElementById('authForm').onsubmit = (e) => {
